@@ -1,0 +1,72 @@
+---
+title: "Introduksjon til simpel regresjonsanalyse"
+author: "Isabelle Valette"
+date: "20 september 2016"
+output: html_document
+---
+
+```{r setup, warning=FALSE}
+
+library("MASS") # To import a dataset
+library("corrplot") # To do correlation analysis
+library("ggplot2") # To visualize data
+```
+
+## Data Import 
+
+Boston datasett viser
+
++ crim: Krimsrate per by
+
++ rm: gjennomsnitlig antall rom per bolig.
+
++ lstat: Andel husstand med lav inntekt.
+
++ medv: boligpris i $1000s.
+
+```{r Boston, fig.height=10, fig.width= 10}
+
+# Code to load data into R
+data <- Boston[,c(14, 1, 6,13)]
+head(data)
+```
+
+
+## Correlasjon Analyse
+
+```{r Correlation, fig.height=10, fig.width= 10}
+# Code to do a correlation analysis
+corrplot(cor(data), method="color", type="upper", tl.cex = 0.8, cl.cex = 0.8, order="original",
+         # Add correlation coefficents
+         addCoef.col = "black",
+         # hide correlation coefficient on the principal diagonal
+         diag=FALSE) 
+         
+```
+
+## Data Visualisering
+
+
+```{r graph}
+# To do simple plots in R
+plot(data$rm,  data$medv)
+```
+
+
+```{r graph2}
+# To do more advanced plots in R with ggplot2
+q <- ggplot(data, aes(x = rm, y = medv)) + geom_point()
+# Adding the regression line
+q + geom_smooth(method = "lm",size = 2 )
+```
+
+
+## Regresjon
+```{r regresjon}
+# To run a simple regression
+model1 <- lm(medv ~ rm, data=data)
+# To visualize the result from the regression model1
+summary(model1)
+```
+
+
